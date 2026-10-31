@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Marta Viewer</title>
+        <link rel="stylesheet"
+            th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+        <script th:src="@{/js/main.js}" defer></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>Live View</h1>
+            <small>Currently showing: <span
+                    id="result-count"
+                    th:text="|${#lists.size(trains)} results|"></span></small>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle"
+                    data-bs-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    Line
+                </button>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <a
+                        class="dropdown-item bg-primary text-white text-decoration-none"
+                        th:href="@{/view/trains/all(line=blue)}">
+                        Blue
+                    </a>
+                    <a
+                        class="dropdown-item bg-warning text-white text-decoration-none"
+                        th:href="@{/view/trains/all(line=gold)}">
+                        Gold
+                    </a>
+                    <a
+                        class="dropdown-item bg-danger text-white text-decoration-none"
+                        th:href="@{/view/trains/all(line=red)}">
+                        Red
+                    </a>
+
+                    <a
+                        class="dropdown-item bg-success text-white text-decoration-none"
+                        th:href="@{/view/trains/all(line=green)}">
+                        Green
+                    </a>
+                </div>
+            </div>
+            <a th:href="@{/view/trains/all}" class="btn btn-secondary">Reset</a>
+            <div class="mb-3">
+                <label for class="form-label">Search</label>
+                <textarea class="form-control" name id="search-bar"
+                    rows="1"></textarea>
+                <output class="search-bar-output"></output>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Destination</th>
+                        <th scope="col">Direction</th>
+                        <th scope="col">Line</th>
+                        <th scope="col">Next Arrival</th>
+                        <th scope="col">Station</th>
+                        <th scope="col">Train Id</th>
+                        <th scope="col">Waiting Time</th>
+                    </tr>
+                </thead>
+                <tbody id="train-body">
+                    <tr th:each="train : ${trains}" class="train-row">
+                        <td class="train-destination"
+                            th:text="${train.destination}"></td>
+                        <td th:text="${train.direction}"></td>
+                        <td th:text="${train.line}"></td>
+                        <td th:text="${train.nextArrival}"></td>
+                        <td th:text="${train.station}"></td>
+                        <td class="train-id" th:text="${train.trainId}"></td>
+                        <td th:text="${train.waitingTime}"
+                            th:classappend="${train.waitingTime == 'Arriving' || train.waitingTime == 'Now' ? 'fw-bold text-success' : (train.waitingSeconds >= 1200 ? 'text-danger' : '')}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <script
+            th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+    </body>
+</html>
